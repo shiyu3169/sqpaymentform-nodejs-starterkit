@@ -18,8 +18,9 @@ const app = express();
 const port = 3000;
 
 // Set the Access Token and Location Id
-const accessToken = 'REPLACE_WITH_ACCESS_TOKEN';
-const locationId = 'REPLACE_WITH_LOCATION_ID';
+const accessToken =
+  'EAAAELsddKB3J4eWZZ78db1lvE2raJy5GgL_nJN6qNmgkEH8On7k1sYn7EGutm9p';
+const locationId = 'CBASEMKYs1pNXgCZcvdmuOUXd_MgAQ';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,10 +33,12 @@ const defaultClient = squareConnect.ApiClient.instance;
 const oauth2 = defaultClient.authentications['oauth2'];
 oauth2.accessToken = accessToken;
 
-app.post('/process-payment', function(req, res){
+app.post('/process-payment', function(req, res) {
   const requestParams = req.body;
 
-  const idempotencyKey = require('crypto').randomBytes(64).toString('hex');
+  const idempotencyKey = require('crypto')
+    .randomBytes(64)
+    .toString('hex');
 
   // Charge the customer's card
   const transactionsApi = new squareConnect.TransactionsApi();
@@ -47,21 +50,21 @@ app.post('/process-payment', function(req, res){
     },
     idempotency_key: idempotencyKey
   };
-  transactionsApi.charge(locationId, requestBody).then(function(data) {
-    const json= JSON.stringify(data);
-    res.status(200).json({
-      'title': 'Payment Successful',
-      'result': json
-    });
-  }, function(error) {
-    res.status(500).json({
-      'title': 'Payment Failure',
-      'result': error.response.text
-    });
-  });
+  transactionsApi.charge(locationId, requestBody).then(
+    function(data) {
+      const json = JSON.stringify(data);
+      res.status(200).json({
+        title: 'Payment Successful',
+        result: json
+      });
+    },
+    function(error) {
+      res.status(500).json({
+        title: 'Payment Failure',
+        result: error.response.text
+      });
+    }
+  );
 });
 
-app.listen(
-  port,
-  () => console.log(`listening on - http://localhost:${port}`)
-);
+app.listen(port, () => console.log(`listening on - http://localhost:${port}`));
