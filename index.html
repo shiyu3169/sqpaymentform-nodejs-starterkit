@@ -13,8 +13,39 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- link to the local custom styles for SqPaymentForm -->
+    <link rel="stylesheet" type="text/css" href="mysqpaymentform.css" />
+    <!-- link to the SqPaymentForm library -->
+    <script
+      type="text/javascript"
+      src="https://js.squareup.com/v2/paymentform"
+    ></script>
+    <!-- link to the local SqPaymentForm initialization -->
+    <script type="text/javascript" src="mysqpaymentform.js"></script>
   </head>
   <body>
-    Get ready for your first payment with Square!
+    <div class="form-container">
+      <div id="sq-ccbox">
+        <form novalidate action="process-payment" method="post" id="nonce-form">
+          <fieldset>
+            <div id="sq-card-number"></div>
+            <div class="third">
+              <div id="sq-expiration-date"></div>
+            </div>
+            <div class="third">
+              <div id="sq-cvv"></div>
+            </div>
+          </fieldset>
+          <button
+            id="sq-creditcard"
+            class="button-credit-card"
+            onclick="onGetCardNonce(event)"
+          >
+            Pay $1.00
+          </button>
+          <input type="hidden" name="nonce" id="card-nonce" />
+        </form>
+      </div>
+    </div>
   </body>
 </html>
